@@ -1,6 +1,7 @@
 from flix.domainmodel.review import Review
 from flix.domainmodel.movie import Movie
 from flix.domainmodel.watchlist import WatchList
+
 class User:
     def __init__(self, user_name : str, password : str):
         if type(user_name) == str:
@@ -34,14 +35,17 @@ class User:
     def __hash__(self):
         return hash(self.__user_name)
 
-    def watch_movie(self, movie:Movie):
+    def watch_movie(self, movie):
         if movie not in self.__watched_movies:
             self.__watched_movies.append(movie)
-            self.__time_spent_watching_movies_minutes += movie.runtime_minutes
+            self.__time_spent_watching_movies_minutes += movie['runtime_minutes']
 
     def add_review(self, review:Review):
         self.__reviews.append(review)
         review.movie.add_review(review)
+
+    def total_movies_watched(self):
+        return len(self.__watched_movies)
 
     def add_movie_to_watchlist(self, movie:Movie):
         self.__watchlist.add_movie(movie)

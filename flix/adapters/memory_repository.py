@@ -12,6 +12,8 @@ from bisect import bisect, bisect_left, insort_left
 
 from flix.adapters.repository import AbstractRepository
 
+from fuzzywuzzy import fuzz
+
 class MemoryRepository(AbstractRepository):
     # Movies are sorted by title in alphabetical order
 
@@ -43,7 +45,8 @@ class MemoryRepository(AbstractRepository):
         # returns the movie objects with title == title string in a list
         return_movies = []
         for movie in self.__dataset_of_movies:
-            if title == movie.title:
+            ratio = fuzz.ratio(title.lower().strip(), movie.title.lower())
+            if ratio > 60:
                 return_movies.append(movie)
         return return_movies
 
@@ -51,7 +54,8 @@ class MemoryRepository(AbstractRepository):
         # returns list of movies directed by director (str)
         movies_list = list()
         for movie in self.__dataset_of_movies:
-            if movie.director.director_full_name == director:
+            ratio = fuzz.ratio(director.lower().strip(), movie.director.director_full_name.lower())
+            if ratio > 80:
                 movies_list.append(movie)
         return movies_list
 
@@ -60,7 +64,8 @@ class MemoryRepository(AbstractRepository):
         movie_list = list()
         for movie in self.__dataset_of_movies:
             for movie_genre in movie.genres:
-                if genre == movie_genre.genre:
+                ratio = fuzz.ratio(genre.lower().strip(), movie_genre.genre.lower())
+                if ratio == 100:
                     movie_list.append(movie)
         return movie_list
 
@@ -69,8 +74,9 @@ class MemoryRepository(AbstractRepository):
         movie_list = list()
         for movie in self.__dataset_of_movies:
             for movie_actor in movie.actors:
-                if actor == movie_actor.actor_full_name:
-                    movie_list.append(actor)
+                ratio = fuzz.ratio(actor.lower().strip(), movie_actor.actor_full_name.lower())
+                if ratio > 75:
+                    movie_list.append(movie)
         return movie_list
 
     def get_first_movie(self): #5
@@ -94,9 +100,10 @@ class MemoryRepository(AbstractRepository):
     def get_user(self, name : str): #8
         # returns the user Object associated with the name string,None if the username isn't valid
         return_user = None
-        for user in self.__dataset_of_users:
-            if name.lower() == user.user_name:
-                return_user = user
+        if type(name) == str:
+             for user in self.__dataset_of_users:
+                if name.lower() == user.user_name:
+                     return_user = user
         return return_user
 
     def add_movie(self, movie: Movie): #9
@@ -177,6 +184,15 @@ class MemoryRepository(AbstractRepository):
                 movie_id_list.append(movie.id)
         return movie_id_list
 
+    def get_movies_by_exact_title(self, title :str):
+        # returns the movie objects with title == title string in a list
+        return_movies = []
+        for movie in self.__dataset_of_movies:
+            ratio = fuzz.ratio(title.lower().strip(), movie.title.lower())
+            if ratio == 100:
+                return_movies.append(movie)
+        return return_movies
+
 #functions to assist testing
 def read_csv_file(filename: str):
     with open(filename, mode = 'r', encoding='utf-8-sig') as csvfile:
@@ -204,7 +220,7 @@ def load_users(data_path, repo):
     return users
 
 def load_movies_and_genres_and_directors_and_actors(data_path, repo):
-    for row in read_csv_file(os.path.join(data_path, 'Data10Movies.csv')):
+    for row in read_csv_file(os.path.join(data_path, 'Data1000Movies.csv')):
         title = row[1]
         release_year = int(row[6])
         runtime = int(row[7])

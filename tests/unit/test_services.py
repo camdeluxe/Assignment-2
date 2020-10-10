@@ -60,7 +60,7 @@ def test_can_add_review(in_memory_repo):
     user = User(username, password)
     in_memory_repo.add_user(user)
     movies_services.add_review(movie_id, review_text, rating, username, in_memory_repo)
-    assert Review(movie, review_text, rating) in movie.reviews
+    assert Review(username, movie, review_text, rating) in movie.reviews
 
 def test_cannot_add_review_for_non_existent_movie(in_memory_repo):
     movie_id = 12
@@ -96,7 +96,7 @@ def test_can_get_movie(in_memory_repo):
     assert Genre('Action') in genres
     assert Genre('Adventure') in genres
     assert movie_as_dict['release_year'] == 2014
-    assert movie_as_dict["runtime"] == 121
+    assert movie_as_dict["runtime_minutes"] == 121
     assert movie_as_dict["rating"] == 8.1
     assert movie_as_dict["votes"] == 757074
     assert movie_as_dict["revenue"] == 333.13
@@ -173,9 +173,13 @@ def test_get_reviews_for_non_existent_movie(in_memory_repo):
     with pytest.raises(NonExistentMovieException):
         movies_as_dict = movies_services.get_reviews_for_movie(12, in_memory_repo)
 
-def test_get_comments_for_article_without_reviews(in_memory_repo):
+def test_get_reviews_for_movie_without_reviews(in_memory_repo):
     movies_as_dict = movies_services.get_reviews_for_movie(2, in_memory_repo)
     assert len(movies_as_dict) == 0
+
+
+
+
 
 
 

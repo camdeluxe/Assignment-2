@@ -25,7 +25,7 @@ def add_review(movie_id: int, review_text: str, rating: int, username: str, repo
         raise UnknownUserException
 
     # Create comment.
-    review = Review(movie, review_text, rating)
+    review = Review(username, movie, review_text, rating)
 
     # Update the repository.
     user.add_review(review)
@@ -41,35 +41,54 @@ def get_movie(movie_id: int, repo: AbstractRepository):
 
 
 def get_first_movie(repo: AbstractRepository):
-
     movie = repo.get_first_movie()
-
     return movie_to_dict(movie)
 
-def get_last_movie(repo: AbstractRepository):
 
+def get_last_movie(repo: AbstractRepository):
     movie = repo.get_last_movie()
     return movie_to_dict(movie)
 
-
-def get_movies_by_title(title : str, repo: AbstractRepository):
-    # Returns articles for the target date (empty if no matches), the date of the previous article (might be null), the date of the next article (might be null)
-
-    movies = repo.get_movies_by_title(title)
-
+def get_movies_by_exact_title(title : str, repo: AbstractRepository):
+    movies = repo.get_movies_by_exact_title(title)
     movies_dto = list()
     prev_title = None
     next_title = None
-
     if len(movies) > 0:
         prev_title = repo.get_title_of_previous_movie(movies[0])
         next_title = repo.get_title_of_next_movie(movies[0])
-
-        # Convert Articles to dictionary form.
         movies_dto = movies_to_dict(movies)
-
     return movies_dto, prev_title, next_title
 
+def get_movies_by_title(title : str, repo: AbstractRepository):
+    movies = repo.get_movies_by_title(title)
+    movies_dto = list()
+    prev_title = None
+    next_title = None
+    if len(movies) > 0:
+        prev_title = repo.get_title_of_previous_movie(movies[0])
+        next_title = repo.get_title_of_next_movie(movies[0])
+        movies_dto = movies_to_dict(movies)
+    return movies_dto, prev_title, next_title
+
+
+def get_movies_by_director(director :str, repo: AbstractRepository):
+    movies = repo.get_movies_by_director(director)
+    if len(movies) > 0:
+        movies = movies_to_dict(movies)
+    return movies
+
+def get_movies_by_genre(genre : str, repo :AbstractRepository):
+    movies = repo.get_movies_by_genre(genre)
+    if len(movies) > 0:
+        movies = movies_to_dict(movies)
+    return movies
+
+def get_movies_by_actor(actor: str, repo: AbstractRepository):
+    movies = repo.get_movies_by_actor(actor)
+    if len(movies) > 0:
+        movies = movies_to_dict(movies)
+    return movies
 
 def get_movie_ids_for_genre(genre : Genre, repo: AbstractRepository):
     movie_ids = repo.get_movie_ids_for_genre(genre)
@@ -99,6 +118,7 @@ def get_reviews_for_movie(movie_id, repo: AbstractRepository):
 # ============================================
 def review_to_dict(review: Review):
     review_dict = {
+        'username' : review.username,
         'movie' : review.movie,
         'review_text' : review.review_text,
         'rating' : review.rating,
@@ -118,7 +138,7 @@ def movie_to_dict(movie: Movie):
         'director' : movie.director,
         'actors' : movie.actors,
         'genres' : movie.genres,
-        'runtime' : movie.runtime_minutes,
+        'runtime_minutes' : movie.runtime_minutes,
         'rating' : movie.rating,
         'votes' : movie.votes,
         'revenue' :  movie.revenue,
@@ -140,12 +160,15 @@ def genre_to_dict(genre: Genre):
 def genres_to_dict(genres: Iterable[Genre]):
     return [genre_to_dict(genre) for genre in genres]
 
+def get_user(repo : AbstractRepository, username = None):
+    user = None
+    try:
+        user = repo.get_user(username)
+    except:
+        pass
+    return user
 
 # ============================================
 # Functions to convert dicts to model entities
 # ============================================
 
-def dict_to_article(dict):
-    movie = Movie(dict.title, dict.release_year)
-    # Note there's no comments or tags.
-    return movie

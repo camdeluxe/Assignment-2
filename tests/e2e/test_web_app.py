@@ -130,4 +130,17 @@ def test_movies_with_genre(client):
     # Check that all articles tagged with 'Health' are included on the page.
     assert b'Movies of genre Action' in response.data
     assert b'Guardians of the Galaxy' in response.data
+    
+def test_stats_page_logged_in(client, auth):
+    auth.login()
+    response = client.get("/display_stats")
+    assert response.status_code == 200
+    assert b'Reviews made:' in response.data
+
+def test_stats_page_not_logged_in(client):
+    response = client.get("/display_stats")
+    assert response.headers['Location'] == 'http://localhost/authentication/login'
+
+
+
 

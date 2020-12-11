@@ -130,3 +130,7 @@ class AbstractRepository(abc.ABC):
     def get_movie_ids_for_genre(self, genre: Genre): #23
         """returns a list of ids of movies associated with the genre obj"""
         raise NotImplementedError
+
+    def get_movies_by_exact_title(self, title: str):
+        """returns the movie objects with title == title string in a list"""
+        raise NotImplementedError

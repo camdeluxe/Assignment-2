@@ -1,6 +1,4 @@
 
-from flix.domainmodel.actor import Actor
-from flix.domainmodel.genre import Genre
 from flix.domainmodel.director import Director
 #from flix.domainmodel.review import Review
 

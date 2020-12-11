@@ -2,89 +2,90 @@ from flix.domainmodel.review import Review
 from flix.domainmodel.movie import Movie
 from flix.domainmodel.watchlist import WatchList
 
+
 class User:
-    def __init__(self, user_name : str, password : str):
+    def __init__(self, user_name: str, password: str):
         if type(user_name) == str:
-            self.__user_name = user_name.strip().lower()
+            self._user_name = user_name.strip().lower()
         else:
-            self.__user_name = None
+            self._user_name = None
         if type(password) == str:
-            self.__password = password
+            self._password = password
         else:
-            self.__password = None
-        self.__watched_movies = []
-        self.__reviews = []
-        self.__time_spent_watching_movies_minutes = 0
-        self.__watchlist = WatchList()
+            self._password = None
+        self._watched_movies = []
+        self._reviews = []
+        self._time_spent_watching_movies_minutes = 0
+        self._watchlist = WatchList()
 
     def __repr__(self):
-        return f'<User {self.__user_name}>'
+        return f'<User {self._user_name}>'
 
     def __eq__(self, other):
-        if self.__user_name == other.user_name:
+        if self._user_name == other.user_name:
             return True
         else:
             return False
 
     def __lt__(self, other):
-        if self.__user_name < other.user_name:
+        if self._user_name < other.user_name:
             return True
         else:
             return False
 
     def __hash__(self):
-        return hash(self.__user_name)
+        return hash(self._user_name)
 
     def watch_movie(self, movie):
-        if movie not in self.__watched_movies:
-            self.__watched_movies.append(movie)
-            self.__time_spent_watching_movies_minutes += movie['runtime_minutes']
+        if movie not in self._watched_movies:
+            self._watched_movies.append(movie)
+            self._time_spent_watching_movies_minutes += movie['runtime_minutes']
 
-    def add_review(self, review:Review):
-        self.__reviews.append(review)
+    def add_review(self, review: Review):
+        self._reviews.append(review)
         review.movie.add_review(review)
 
     def total_movies_watched(self):
-        return len(self.__watched_movies)
+        return len(self._watched_movies)
 
-    def add_movie_to_watchlist(self, movie:Movie):
-        self.__watchlist.add_movie(movie)
+    def add_movie_to_watchlist(self, movie: Movie):
+        self._watchlist.add_movie(movie)
 
     def remove_movie_from_watchlist(self, movie: Movie):
-        self.__watchlist.remove_movie(movie)
+        self._watchlist.remove_movie(movie)
 
     def select_movie_to_watch(self, index: int):
-        return self.__watchlist.select_movie_to_watch(index)
+        return self._watchlist.select_movie_to_watch(index)
 
     def get_watchlist_size(self):
-        return self.__watchlist.size()
+        return self._watchlist.size()
 
     def get_first_movie_in_watchlist(self):
-        return self.__watchlist.first_movie_in_watchlist()
+        return self._watchlist.first_movie_in_watchlist()
 
     @property
     def user_name(self):
-        return self.__user_name
+        return self._user_name
 
     @property
     def password(self):
-        return self.__password
+        return self._password
 
     @property
     def watched_movies(self):
-        return self.__watched_movies
+        return self._watched_movies
 
     @property
     def reviews(self):
-        return self.__reviews
+        return self._reviews
 
     @property
     def time_spent_watching_movies_minutes(self):
-        return self.__time_spent_watching_movies_minutes
+        return self._time_spent_watching_movies_minutes
 
     @property
     def watchlist(self):
-        return self.__watchlist
+        return self._watchlist
 
 
 class TestUserMethods:
@@ -99,6 +100,7 @@ class TestUserMethods:
         assert user3.__lt__(user1) == True
         assert user3.__lt__(user3) == False
         assert user1.__lt__(user3) == False
+
 
 """
 user1 = User('Martin', 'pw12345')

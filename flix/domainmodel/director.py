@@ -1,4 +1,3 @@
-
 class Director:
 
     def __init__(self, director_full_name: str):

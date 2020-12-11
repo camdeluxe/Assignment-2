@@ -6,6 +6,7 @@ from flix.authentication.authentication import login_required
 stats_blueprint = Blueprint(
     'stats_bp', __name__)
 
+
 @stats_blueprint.route('/display_stats', methods=['GET'])
 @login_required
 def stats():

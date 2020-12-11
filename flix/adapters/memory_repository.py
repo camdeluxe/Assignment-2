@@ -14,8 +14,9 @@ from flix.adapters.repository import AbstractRepository
 
 from fuzzywuzzy import fuzz
 
+
 class MemoryRepository(AbstractRepository):
-    # Movies are sorted by title in alphabetical order
+    # Movies are sorted by title in alphabetical order.
 
     def __init__(self):
         self.__dataset_of_movies = list()
@@ -28,21 +29,25 @@ class MemoryRepository(AbstractRepository):
     @property
     def dataset_of_movies(self):
         return self.__dataset_of_movies
+
     @property
     def dataset_of_actors(self):
         return self.__dataset_of_actors
+
     @property
     def dataset_of_directors(self):
         return self.__dataset_of_directors
+
     @property
     def dataset_of_genres(self):
         return self.__dataset_of_genres
+
     @property
     def dataset_of_users(self):
         return self.__dataset_of_users
 
-    def get_movies_by_title(self, title :str): #1
-        # returns the movie objects with title == title string in a list
+    def get_movies_by_title(self, title: str):  # 1
+        # returns the movie objects with title == title string in a list.
         return_movies = []
         for movie in self.__dataset_of_movies:
             ratio = fuzz.ratio(title.lower().strip(), movie.title.lower())
@@ -50,8 +55,8 @@ class MemoryRepository(AbstractRepository):
                 return_movies.append(movie)
         return return_movies
 
-    def get_movies_by_director(self, director : str): #2
-        # returns list of movies directed by director (str)
+    def get_movies_by_director(self, director: str):  # 2
+        # returns list of movies directed by director (str).
         movies_list = list()
         for movie in self.__dataset_of_movies:
             ratio = fuzz.ratio(director.lower().strip(), movie.director.director_full_name.lower())
@@ -59,8 +64,8 @@ class MemoryRepository(AbstractRepository):
                 movies_list.append(movie)
         return movies_list
 
-    def get_movies_by_genre(self, genre: str): #3
-        # returns list of all movies that are categorised as genre (str)
+    def get_movies_by_genre(self, genre: str):  # 3
+        # returns list of all movies that are categorised as genre (str).
         movie_list = list()
         for movie in self.__dataset_of_movies:
             for movie_genre in movie.genres:
@@ -69,8 +74,8 @@ class MemoryRepository(AbstractRepository):
                     movie_list.append(movie)
         return movie_list
 
-    def get_movies_by_actor(self, actor:str): #4
-        # returns list of all movies that actor (str) starred in
+    def get_movies_by_actor(self, actor: str):  # 4
+        # returns list of all movies that actor (str) starred in.
         movie_list = list()
         for movie in self.__dataset_of_movies:
             for movie_actor in movie.actors:
@@ -79,42 +84,42 @@ class MemoryRepository(AbstractRepository):
                     movie_list.append(movie)
         return movie_list
 
-    def get_first_movie(self): #5
-        # returns first movie in dataset (sorted by alphabetical order)
+    def get_first_movie(self):  # 5
+        # returns first movie in dataset (sorted by alphabetical order).
         movie = None
         if len(self.__dataset_of_movies) > 0:
             movie = self.__dataset_of_movies[0]
         return movie
 
-    def get_last_movie(self): #6
+    def get_last_movie(self):  # 6
         # returns last movie in dataset
         movie = None
         if len(self.__dataset_of_movies) > 0:
             movie = self.__dataset_of_movies[-1]
         return movie
 
-    def add_user(self, user:User): #7
+    def add_user(self, user: User):  # 7
         # add a user to the dataset
         self.__dataset_of_users.append(user)
 
-    def get_user(self, name : str): #8
-        # returns the user Object associated with the name string,None if the username isn't valid
+    def get_user(self, name: str):  # 8
+        # returns the user Object associated with the name string, None if the username isn't valid.
         return_user = None
         if type(name) == str:
-             for user in self.__dataset_of_users:
+            for user in self.__dataset_of_users:
                 if name.lower() == user.user_name:
-                     return_user = user
+                    return_user = user
         return return_user
 
-    def add_movie(self, movie: Movie): #9
+    def add_movie(self, movie: Movie):  # 9
         insort_left(self.__dataset_of_movies, movie)
         self.__movies_index[movie.id] = movie
 
-    def get_movie_by_id(self, id:int): #10
+    def get_movie_by_id(self, id: int):  # 10
         if id in self.__movies_index.keys():
             return self.__movies_index[id]
 
-    def get_movies_by_id(self, id_list :list): #11
+    def get_movies_by_id(self, id_list: list):  # 11
         actual_ids = list()
         for id in id_list:
             if id in self.__movies_index:
@@ -126,45 +131,45 @@ class MemoryRepository(AbstractRepository):
                     movies_list.append(movie)
         return movies_list
 
-    def get_number_of_movies(self): #12
-        # returns amount of movies currently in dataset
+    def get_number_of_movies(self):  # 12
+        # returns amount of movies currently in dataset.
         return len(self.__dataset_of_movies)
 
-    def add_genre(self, genre: Genre): #13
+    def add_genre(self, genre: Genre):  # 13
         self.__dataset_of_genres.add(genre)
 
-    def get_genres(self): #14
+    def get_genres(self):  # 14
         return self.__dataset_of_genres
 
-    def add_actor(self, actor:Actor): #15
+    def add_actor(self, actor: Actor):  # 15
         self.__dataset_of_actors.add(actor)
 
-    def get_actors(self): #16
+    def get_actors(self):  # 16
         return self.__dataset_of_actors
 
-    def add_director(self, director: Director): #17
+    def add_director(self, director: Director):  # 17
         self.__dataset_of_directors.add(director)
 
-    def get_directors(self): #18
+    def get_directors(self):  # 18
         return self.__dataset_of_directors
 
-    def get_movie_index(self, movie: Movie): #19
+    def get_movie_index(self, movie: Movie):  # 19
         index = bisect_left(self.__dataset_of_movies, movie)
         if index != len(self.__dataset_of_movies):
             return index
         raise ValueError
 
-    def get_title_of_previous_movie(self, movie:Movie): #20
+    def get_title_of_previous_movie(self, movie: Movie):  # 20
         previous_title = None
         try:
             index = self.__dataset_of_movies.index(movie)
             for stored_movie in self.__dataset_of_movies[0:index]:
-                previous_title =stored_movie.title
+                previous_title = stored_movie.title
         except ValueError:
             pass
         return previous_title
 
-    def get_title_of_next_movie(self, movie:Movie): #21
+    def get_title_of_next_movie(self, movie: Movie):  # 21
         next_title = None
         try:
             index = self.__dataset_of_movies.index(movie)
@@ -174,18 +179,18 @@ class MemoryRepository(AbstractRepository):
             pass
         return next_title
 
-    def get_movies(self): #22
+    def get_movies(self):  # 22
         return self.__dataset_of_movies
 
-    def get_movie_ids_for_genre(self, genre: Genre): #23
+    def get_movie_ids_for_genre(self, genre: Genre):  # 23
         movie_id_list = list()
         for movie in self.__dataset_of_movies:
             if genre in movie.genres:
                 movie_id_list.append(movie.id)
         return movie_id_list
 
-    def get_movies_by_exact_title(self, title :str):
-        # returns the movie objects with title == title string in a list
+    def get_movies_by_exact_title(self, title: str):
+        # returns the movie objects with title == title string in a list.
         return_movies = []
         for movie in self.__dataset_of_movies:
             ratio = fuzz.ratio(title.lower().strip(), movie.title.lower())
@@ -193,9 +198,10 @@ class MemoryRepository(AbstractRepository):
                 return_movies.append(movie)
         return return_movies
 
-#functions to assist testing
+
+# functions to assist testing
 def read_csv_file(filename: str):
-    with open(filename, mode = 'r', encoding='utf-8-sig') as csvfile:
+    with open(filename, mode='r', encoding='utf-8-sig') as csvfile:
         reader = csv.reader(csvfile)
 
         # Read first line of the the CSV file.
@@ -218,6 +224,7 @@ def load_users(data_path, repo):
         repo.add_user(user)
         users[data_row[0]] = user
     return users
+
 
 def load_movies_and_genres_and_directors_and_actors(data_path, repo):
     for row in read_csv_file(os.path.join(data_path, 'Data1000Movies.csv')):
@@ -255,7 +262,7 @@ def load_movies_and_genres_and_directors_and_actors(data_path, repo):
 
         id = int(row[0])
 
-        #create movie object and assign everything
+        # create movie object and assign everything
         movie = Movie(title, release_year)
         movie.actors = actor_list
         movie.genres = genre_list
@@ -275,7 +282,7 @@ def load_movies_and_genres_and_directors_and_actors(data_path, repo):
             repo.add_actor(actor)
         repo.add_director(movie.director)
 
+
 def populate(data_path, repo):
     load_users(data_path, repo)
     load_movies_and_genres_and_directors_and_actors(data_path, repo)
-

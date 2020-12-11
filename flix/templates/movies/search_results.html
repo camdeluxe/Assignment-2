@@ -10,7 +10,7 @@
     {% for movie in movies %}
     <movie id="movie">
         <a href="{{movie.display_movie_url}}" >
-            <img id="logo", src="{{ url_for('static', filename='playbutton.jpg') }}" />
+            <img id="logo" src="{{ url_for('static', filename='playbutton.jpg') }}" />
         </a>
         <h2>{{movie.title}}</h2>
         <p>{{movie.description}}</p>

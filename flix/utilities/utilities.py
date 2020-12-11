@@ -3,7 +3,6 @@ from flask import Blueprint, request, render_template, redirect, url_for, sessio
 import flix.adapters.repository as repo
 import flix.utilities.services as services
 
-
 # Configure Blueprint.
 utilities_blueprint = Blueprint(
     'utilities_bp', __name__)
@@ -25,6 +24,7 @@ def get_selected_movies(quantity=3):
         movie['movie_url'] = url_for('movies_bp.movies_by_title', title=movie['title'])
     return movies
 
+
 def get_recommendations(username):
     recommendations = []
     user = services.get_user(repo.repo_instance, username)
@@ -39,6 +39,7 @@ def get_recommendations(username):
     for movie in recommendations:
         movie['movie_url'] = url_for('movies_bp.movies_by_title', title=movie['title'])
     return recommendations
+
 
 def get_user_obj(username):
     return services.get_user(repo.repo_instance, username)

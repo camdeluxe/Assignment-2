@@ -1,5 +1,6 @@
 from flix.domainmodel.movie import Movie
 
+
 class WatchList:
     def __init__(self):
         self.__watchlist = []
@@ -8,12 +9,12 @@ class WatchList:
         if movie not in self.__watchlist:
             self.__watchlist.append(movie)
 
-    def remove_movie(self, movie:Movie):
+    def remove_movie(self, movie: Movie):
         if movie in self.__watchlist:
             self.__watchlist.remove(movie)
 
-    def select_movie_to_watch(self, index:int):
-        if index >= 0 and index < len(self.__watchlist) and len(self.__watchlist) > 0:
+    def select_movie_to_watch(self, index: int):
+        if 0 <= index < len(self.__watchlist) and len(self.__watchlist) > 0:
             return self.__watchlist[index]
         else:
             return None
@@ -42,9 +43,8 @@ class WatchList:
         else:
             raise StopIteration
 
-
     @property
     def watchlist(self):
         return self.__watchlist
 
-#tests were done on coderunner, all passed
+# tests were done on coderunner, all passed

@@ -1,4 +1,3 @@
-
 class Genre:
     def __init__(self, genre: str):
         if genre == "" or type(genre) is not str:

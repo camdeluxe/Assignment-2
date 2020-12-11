@@ -2,7 +2,6 @@ from flask import Blueprint, render_template, session
 
 import flix.utilities.utilities as utilities
 
-
 home_blueprint = Blueprint(
     'home_bp', __name__)
 

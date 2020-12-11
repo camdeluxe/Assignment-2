@@ -48,9 +48,7 @@ def authenticate_user(username: str, password: str, repo: AbstractRepository):
         raise AuthenticationException
 
 
-# ===================================================
 # Functions to convert model entities to dictionaries
-# ===================================================
 
 def user_to_dict(user: User):
     user_dict = {

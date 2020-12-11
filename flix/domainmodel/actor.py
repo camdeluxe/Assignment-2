@@ -1,4 +1,3 @@
-
 class Actor:
     def __init__(self, actor_name : str):
         self.__actor_colleagues = []

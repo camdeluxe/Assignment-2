@@ -6,8 +6,10 @@ from flix import create_app
 from flix.adapters import memory_repository
 from flix.adapters.memory_repository import MemoryRepository
 
-TEST_DATA_PATH = os.path.join('C:', os.sep, 'Users', 'camer', 'Desktop', 'A place to save stuff', 'Compsci235', 'Assignment-2',
+TEST_DATA_PATH = os.path.join('C:', os.sep, 'Users', 'camer', 'Desktop', 'A place to save stuff', 'Compsci235',
+                              'Assignment-2',
                               'tests', 'data')
+
 
 @pytest.fixture
 def in_memory_repo():
@@ -15,15 +17,17 @@ def in_memory_repo():
     memory_repository.populate(TEST_DATA_PATH, repo)
     return repo
 
+
 @pytest.fixture
 def client():
     my_app = create_app({
-        'TESTING': True,                                # Set to True during testing.
-        'TEST_DATA_PATH': TEST_DATA_PATH,               # Path for loading test data into the repository.
-        'WTF_CSRF_ENABLED': False                       # test_client will not send a CSRF token, so disable validation.
+        'TESTING': True,  # Set to True during testing.
+        'TEST_DATA_PATH': TEST_DATA_PATH,  # Path for loading test data into the repository.
+        'WTF_CSRF_ENABLED': False  # test_client will not send a CSRF token, so disable validation.
     })
 
     return my_app.test_client()
+
 
 class AuthenticationManager:
     def __init__(self, client):
@@ -42,4 +46,3 @@ class AuthenticationManager:
 @pytest.fixture
 def auth(client):
     return AuthenticationManager(client)
-
